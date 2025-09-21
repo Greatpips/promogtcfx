@@ -15,10 +15,10 @@ function App() {
       <Nav />
       <Hero />
       <About />
-      <Webinar/>
+      <Webinar />
       <Highlight/>
       <Testimonial/>
-      <Testi></Testi>
+      <Testi/>
       <Faq/>
       <Gtcfx/>
       <AwardSlider/>

@@ -7,7 +7,7 @@ const faqData = [
   },
   {
     question: "What topics will be covered in the seminar?",
-    answer: "We're packing a lot into this power hour! Expect expert tips from Temitope Ijibadejo, live market insights, mindset training for discipline and accountability, and ways to stay plugged into a strong trading community.",
+    answer: "We're packing a lot into this power hour! Expect expert tips from Seasoned Market Mentors, live market insights, mindset training for discipline and accountability, and ways to stay plugged into a strong trading community",
   },
   {
     question: "How long is the seminar?",

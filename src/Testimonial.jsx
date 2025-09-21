@@ -17,18 +17,18 @@ const Testimonial = () => {
 
   // A list of message templates to cycle through
   const messages = [
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now.",
-    "Just reserved their seat now."
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now.",
+    " more Just reserved their seat now."
   ];
 
   useEffect(() => {

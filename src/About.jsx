@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import MoveFromLeft from './MoveFromLeft';
-import MoveFromRight from './MoveFromRight';
 import backGround1 from './img/background1.png';
 import FadeIn from './FadeIn';
-import { useForm, ValidationError } from '@formspree/react';
 
 const slides = [
   {
@@ -21,7 +18,19 @@ function About() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [state, handleSubmit] = useForm('xwpndgbd');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  // Added formData state for inputs
+  const [formData, setFormData] = useState({
+    Name: '',
+    Email: '',
+    Phone: '',
+    Whatsapp: '',
+  });
+
+  // Added your working Google Apps Script URL
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbxo_SvuggiuzOcUumNKXKzmz8rrvE3Zp-8Y_xGYLGsLE3NnsSxvvpzfOkkN6NS6sakZRw/exec';
 
   // Auto-play functionality for slider
   useEffect(() => {
@@ -30,15 +39,27 @@ function About() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  // Form success handling
+  
+  // New useEffect hook to handle form success and trigger the Facebook Pixel event
   useEffect(() => {
-    if (state.succeeded) {
-      const whatsappLink = "https://wa.me/1234567890?text=I've%20successfully%20signed%20up%20with%20FXGTC!";
-      alert(`Successfully signed up!\n\nClick OK to chat with us on WhatsApp.\n\n${whatsappLink}`);
+    if (status === 'succeeded') {
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'CompleteRegistration');
+      }
+      setShowSuccessModal(true);
       closeForm();
     }
-  }, [state.succeeded]);
+  }, [status]);
+
+  const handleWhatsAppRedirect = () => {
+    const whatsappLink = "https://wa.me/2347076560970";
+    window.location.href = whatsappLink;
+    setShowSuccessModal(false);
+  };
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
 
   const goToPrev = () => {
     setCurrentSlide((prevSlide) => (prevSlide === 0 ? slides.length - 1 : prevSlide - 1));
@@ -59,11 +80,48 @@ function About() {
     setIsTransitioning(false);
     setTimeout(() => {
       setShowForm(false);
+      setStatus(null);
+      setFormData({ Name: '', Email: '', Phone: '', Whatsapp: '' });
     }, 300);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  // Updated handleSubmit to remove success-handling logic
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('submitting');
+
+    const urlEncodedData = new URLSearchParams(formData).toString();
+
+    try {
+      const response = await fetch(scriptUrl, {
+        method: 'POST',
+        body: urlEncodedData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      if (response.ok) {
+        setStatus('succeeded');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setStatus('error');
+    }
+  };
+
   return (
-    <section className="bg-white border-t-8 border-t-[rgb(182,135,86)]">
+    <section id="about" className="bg-white border-t-8 border-t-[rgb(182,135,86)]">
       <div className="bg-[rgb(2,0,47)] p-4 sm:p-6 relative overflow-hidden h-[300px] xs:h-[350px] sm:h-[400px] flex justify-center items-center">
         {/* SLIDER CONTAINER */}
         <div
@@ -121,43 +179,36 @@ function About() {
       >
         <div className="absolute inset-0 opacity-50 w-full bg-[rgb(236,243,253)]"></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center p-4 sm:p-6 md:p-[5em]">
-            <div className=" hover:shadow-2xl transition-all ease-in-out duration-300  capitalize text-[1.5rem] xs:text-[1.8rem] sm:text-[2rem] px-4 sm:px-[2rem] py-4 sm:py-[4rem] bg-gradient-to-b from-[rgb(2,8,62)] to-[rgb(12,22,114)] z-10 rounded-4xl font-bold">
-             <FadeIn delay={0}>
-               <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(255,214,170)] to-[rgb(182,135,86)]">
+          <div className="hover:shadow-2xl transition-all ease-in-out duration-300 capitalize text-[1.5rem] xs:text-[1.8rem] sm:text-[2rem] px-4 sm:px-[2rem] py-4 sm:py-[4rem] bg-gradient-to-b from-[rgb(2,8,62)] to-[rgb(12,22,114)] z-10 rounded-4xl font-bold">
+            <FadeIn delay={0}>
+              <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(255,214,170)] to-[rgb(182,135,86)]">
                 LET AI CREATE WEALTH FOR YOU
               </h2>
-             </FadeIn>
-            </div>
-
-
-          <div className=" hover:shadow-2xl transition-all ease-in-out duration-300 sm:col-span-2 bg-white z-10 rounded-4xl">
-   
-             <FadeIn delay={100}>
-               <h2 className="capitalize text-[1.5rem] xs:text-[1.5rem] sm:text-[1.8rem] px-4 sm:px-[1.5rem] py-4 sm:py-[4rem] text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(230,160,87)] to-[rgb(182,135,86)]">
-                Discover How Artificial Intelligence Can Turn The Toughest Trading Decisions Into Simple And Profitable Moves While You Sleep
-              </h2>
-             </FadeIn>
-          
+            </FadeIn>
           </div>
 
-        
-            <div className=" hover:shadow-2xl transition-all ease-in-out duration-300  capitalize text-[1.5rem] xs:text-[1.8rem] sm:text-[2rem] px-4 sm:px-[2rem] py-4 sm:py-[4rem] rounded-4xl font-bold bg-gradient-to-b from-[rgb(2,8,62)] to-[rgb(12,22,114)] z-10">
-              <FadeIn delay={0}>
-                <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(255,214,170)] to-[rgb(182,135,86)]">
+          <div className="hover:shadow-2xl transition-all ease-in-out duration-300 sm:col-span-2 bg-white z-10 rounded-4xl">
+            <FadeIn delay={100}>
+              <h2 className="capitalize text-[1.5rem] xs:text-[1.5rem] sm:text-[1.8rem] px-4 sm:px-[1.5rem] py-4 sm:py-[4rem] text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(230,160,87)] to-[rgb(182,135,86)]">
+                Discover How Artificial Intelligence Can Turn The Toughest Trading Decisions Into Simple And Profitable Moves While You Sleep
+              </h2>
+            </FadeIn>
+          </div>
+
+          <div className="hover:shadow-2xl transition-all ease-in-out duration-300 capitalize text-[1.5rem] xs:text-[1.8rem] sm:text-[2rem] px-4 sm:px-[2rem] py-4 sm:py-[4rem] rounded-4xl font-bold bg-gradient-to-b from-[rgb(2,8,62)] to-[rgb(12,22,114)] z-10">
+            <FadeIn delay={0}>
+              <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(255,214,170)] to-[rgb(182,135,86)]">
                 LET AI GIVE YOU THE EDGE YOU NEED
               </h2>
-              </FadeIn>
-            </div>
-       
+            </FadeIn>
+          </div>
 
-          <div className=" hover:shadow-2xl transition-all ease-in-out duration-300  sm:col-span-2 bg-white z-10 px-4 sm:px-[2rem] py-4 sm:py-[2.5rem] rounded-4xl">
-           
-             <FadeIn delay={100}>
-               <h2 className="capitalize text-[1.5rem] xs:text-[1.5rem] sm:text-[1.5rem] px-4 sm:px-[1.5rem] py-4 sm:py-[1.5rem] text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(230,160,87)] to-[rgb(182,135,86)]">
+          <div className="hover:shadow-2xl transition-all ease-in-out duration-300 sm:col-span-2 bg-white z-10 px-4 sm:px-[2rem] py-4 sm:py-[2.5rem] rounded-4xl">
+            <FadeIn delay={100}>
+              <h2 className="capitalize text-[1.5rem] xs:text-[1.5rem] sm:text-[1.5rem] px-4 sm:px-[1.5rem] py-4 sm:py-[1.5rem] text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(230,160,87)] to-[rgb(182,135,86)]">
                 For Years The Smartest Traders Are Those That Know How To Use Technology. Now It's Your Turn. Join The Evolution And Let AI Take Your Trading To The Next Level
               </h2>
-             </FadeIn>
-           
+            </FadeIn>
           </div>
 
           <FadeIn>
@@ -191,51 +242,37 @@ function About() {
                 placeholder="Name"
                 name="Name"
                 required
+                value={formData.Name} // Added
+                onChange={handleChange} // Added
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="name-error"
               />
-              <ValidationError prefix="Name" field="Name" errors={state.errors} id="name-error" />
               <input
                 type="email"
                 placeholder="Email"
                 name="Email"
                 required
+                value={formData.Email} // Added
+                onChange={handleChange} // Added
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="email-error"
               />
-              <ValidationError prefix="Email" field="Email" errors={state.errors} id="email-error" />
               <input
                 type="tel"
                 placeholder="Phone Number"
-                name="Phone Number"
+                name="Phone" // Corrected to match your headers
                 required
-                className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="phone-error"
-              />
-              <ValidationError
-                prefix="Phone Number"
-                field="Phone Number"
-                errors={state.errors}
-                id="phone-error"
-              />
-              <input
-                type="text"
-                placeholder="TikTok Handle"
-                name="TikTok Handle"
+                value={formData.Phone} // Added
+                onChange={handleChange} // Added
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
               />
               <input
-                type="text"
-                placeholder="Instagram Handle"
-                name="Instagram Handle"
+                type="tel"
+                placeholder="Whatsapp Number"
+                name="Whatsapp" // Corrected to match your headers
+                value={formData.Whatsapp} // Added
+                onChange={handleChange} // Added
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
               />
-              <input
-                type="text"
-                placeholder="Telegram Handle"
-                name="Telegram Handle"
-                className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-              />
+             
               <div className="flex justify-end space-x-2 xs:space-x-3 sm:space-x-4">
                 <button
                   type="button"
@@ -247,14 +284,45 @@ function About() {
                 </button>
                 <button
                   type="submit"
-                  disabled={state.submitting}
+                  disabled={status === 'submitting'}
                   className="px-3 xs:px-4 sm:px-6 py-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 focus:ring-2 focus:ring-blue-900 focus:outline-none text-sm xs:text-base transition duration-300"
-                  aria-label={state.submitting ? 'Submitting form' : 'Submit form'}
+                  aria-label={status === 'submitting' ? 'Submitting form' : 'Submit form'}
                 >
-                  {state.submitting ? 'Submitting...' : 'Submit'}
+                  {status === 'submitting' ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Success Modal */}
+      {showSuccessModal && (
+        <div
+          className={`fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out ${
+            showSuccessModal ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm mx-4 text-center transform transition-all duration-300 ease-in-out scale-100">
+            <h3 className="text-xl font-bold mb-4 text-gray-800">Registration Complete!</h3>
+            <p className="text-gray-600 mb-6">
+              Congratulations! Your registration is successfully completed.
+              Do you well to chat with us via WhatsApp, Thank you
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={closeSuccessModal}
+                className="px-6 py-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-300"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleWhatsAppRedirect}
+                className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition duration-300"
+              >
+                Chat on WhatsApp
+              </button>
+            </div>
           </div>
         </div>
       )}

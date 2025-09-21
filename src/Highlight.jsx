@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import FadeIn from './FadeIn';
-import { useForm, ValidationError } from '@formspree/react';
 import long from './img/long.jpg';
 import long2 from './img/long2.jpg';
 import short1 from './img/short1.jpg';
@@ -12,7 +11,19 @@ import short5 from './img/short5.jpg';
 function Highlight() {
   const [showForm, setShowForm] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [state, handleSubmit] = useForm('xwpndgbd');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  // Added formData state for inputs
+  const [formData, setFormData] = useState({
+    Name: '',
+    Email: '',
+    Phone: '',
+    Whatsapp: '',
+  });
+
+  // Added your working Google Apps Script URL
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbxo_SvuggiuzOcUumNKXKzmz8rrvE3Zp-8Y_xGYLGsLE3NnsSxvvpzfOkkN6NS6sakZRw/exec';
 
   const handleSignUpClick = () => {
     setShowForm(true);
@@ -25,16 +36,68 @@ function Highlight() {
     setIsTransitioning(false);
     setTimeout(() => {
       setShowForm(false);
+      setStatus(null); // Reset status
+      setFormData({ Name: '', Email: '', Phone: '', Whatsapp: '' }); // Reset form data
     }, 300);
   };
 
+  const handleWhatsAppRedirect = () => {
+    const whatsappLink = "https://wa.me/2347076560970";
+    window.location.href = whatsappLink;
+    setShowSuccessModal(false);
+  };
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  // Added handleChange function to update form state
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  // Updated handleSubmit function to use fetch
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('submitting');
+
+    const urlEncodedData = new URLSearchParams(formData).toString();
+
+    try {
+      const response = await fetch(scriptUrl, {
+        method: 'POST',
+        body: urlEncodedData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      if (response.ok) {
+        setStatus('succeeded');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setStatus('error');
+    }
+  };
+  
+  // New useEffect hook to handle form success and trigger the Facebook Pixel event
   useEffect(() => {
-    if (state.succeeded) {
-      const whatsappLink = "https://wa.me/1234567890?text=I've%20successfully%20signed%20up%20with%20FXGTC!";
-      alert(`Successfully signed up!\n\nClick OK to chat with us on WhatsApp.\n\n${whatsappLink}`);
+    if (status === 'succeeded') {
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'CompleteRegistration');
+      }
+      setShowSuccessModal(true);
       closeForm();
     }
-  }, [state.succeeded]);
+  }, [status]);
+
 
   return (
     <section className="bg-white  sm:py-4 md:py-[5rem] px-4 sm:px-6 md:px-[2rem]">
@@ -47,64 +110,62 @@ function Highlight() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 min-h-[300px] sm:min-h-[400px] md:min-h-[560px]">
           {/* Featured long video highlights */}
           <FadeIn delay={0}>
-          <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-300 h-[200px] sm:h-[300px] md:h-[400px]">
-           
-             <img
-              src={long}
-              alt="Featured seminar highlight 1"
-              className="w-full h-full object-cover"
-            />
-          </div>
+            <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-300 h-[200px] sm:h-[300px] md:h-[400px]">
+              <img
+                src={long}
+                alt="Featured seminar highlight 1"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </FadeIn>
           <FadeIn delay={50}>
             <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-300 h-[200px] sm:h-[300px] md:h-[400px]">
-            <img
-              src={long2}
-              alt="Featured seminar highlight 2"
-              className="w-full h-full object-cover"
-            />
-          </div>
+              <img
+                src={long2}
+                alt="Featured seminar highlight 2"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </FadeIn>
 
           {/* Shorter video highlights */}
-        
-            <FadeIn delay={100}>
-              <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[300px] sm:h-[200px] md:h-[400px]">
+          <FadeIn delay={100}>
+            <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[300px] sm:h-[200px] md:h-[400px]">
               <img
                 src={short1}
                 alt="Short seminar highlight 1"
                 className="w-full h-full object-cover"
               />
             </div>
-            </FadeIn>
-           <FadeIn delay={150}>
-             <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[300px] sm:h-[200px] md:h-[250px]">
+          </FadeIn>
+          <FadeIn delay={150}>
+            <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[300px] sm:h-[200px] md:h-[250px]">
               <img
                 src={short2}
                 alt="Short seminar highlight 2"
                 className="w-full h-full object-cover"
               />
             </div>
-           </FadeIn>
-           <FadeIn delay={200}>
-             <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[150px] sm:h-[200px] md:h-[250px]">
+          </FadeIn>
+          <FadeIn delay={200}>
+            <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[150px] sm:h-[200px] md:h-[250px]">
               <img
                 src={short3}
                 alt="Short seminar highlight 3"
                 className="w-full h-full object-cover"
               />
             </div>
-           </FadeIn>
-           <FadeIn delay={250}>
-             <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[150px] sm:h-[200px] md:h-[250px]">
+          </FadeIn>
+          <FadeIn delay={250}>
+            <div className="rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[150px] sm:h-[200px] md:h-[250px]">
               <img
                 src={short5}
                 alt="Short seminar highlight 4"
                 className="w-full h-full object-cover"
               />
             </div>
-           </FadeIn >
-            <div className="col-span-1 sm:col-span-2 md:col-span-3 rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[200px] sm:h-[300px] md:h-[400px]">
+          </FadeIn >
+          <div className="col-span-1 sm:col-span-2 md:col-span-3 rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 bg-gray-200 h-[200px] sm:h-[300px] md:h-[400px]">
             <img
               src={short4}
               alt="Wide seminar highlight"
@@ -144,51 +205,37 @@ function Highlight() {
                 placeholder="Name"
                 name="Name"
                 required
+                value={formData.Name}
+                onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="name-error"
               />
-              <ValidationError prefix="Name" field="Name" errors={state.errors} id="name-error" />
               <input
                 type="email"
                 placeholder="Email"
                 name="Email"
                 required
+                value={formData.Email}
+                onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="email-error"
               />
-              <ValidationError prefix="Email" field="Email" errors={state.errors} id="email-error" />
               <input
                 type="tel"
                 placeholder="Phone Number"
-                name="Phone Number"
+                name="Phone"
                 required
-                className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="phone-error"
-              />
-              <ValidationError
-                prefix="Phone Number"
-                field="Phone Number"
-                errors={state.errors}
-                id="phone-error"
-              />
-              <input
-                type="text"
-                placeholder="TikTok Handle"
-                name="TikTok Handle"
+                value={formData.Phone}
+                onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
               />
               <input
-                type="text"
-                placeholder="Instagram Handle"
-                name="Instagram Handle"
+                type="tel"
+                placeholder="Whatsapp Number"
+                name="Whatsapp"
+                value={formData.Whatsapp}
+                onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
               />
-              <input
-                type="text"
-                placeholder="Telegram Handle"
-                name="Telegram Handle"
-                className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-              />
+            
               <div className="flex justify-end space-x-2 xs:space-x-3 sm:space-x-4">
                 <button
                   type="button"
@@ -200,14 +247,45 @@ function Highlight() {
                 </button>
                 <button
                   type="submit"
-                  disabled={state.submitting}
+                  disabled={status === 'submitting'}
                   className="px-3 xs:px-4 sm:px-6 py-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 focus:ring-2 focus:ring-blue-900 focus:outline-none text-sm xs:text-base transition duration-300"
-                  aria-label={state.submitting ? 'Submitting form' : 'Submit form'}
+                  aria-label={status === 'submitting' ? 'Submitting form' : 'Submit form'}
                 >
-                  {state.submitting ? 'Submitting...' : 'Submit'}
+                  {status === 'submitting' ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Success Modal */}
+      {showSuccessModal && (
+        <div
+          className={`fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out ${
+            showSuccessModal ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm mx-4 text-center transform transition-all duration-300 ease-in-out scale-100">
+            <h3 className="text-xl font-bold mb-4 text-gray-800">Registration Complete!</h3>
+            <p className="text-gray-600 mb-6">
+              Congratulations! Your registration is successfully completed.
+              Do you well to chat with us via WhatsApp, Thank you
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={closeSuccessModal}
+                className="px-6 py-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-300"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleWhatsAppRedirect}
+                className="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition duration-300"
+              >
+                Chat on WhatsApp
+              </button>
+            </div>
           </div>
         </div>
       )}
