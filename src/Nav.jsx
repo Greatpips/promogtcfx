@@ -99,7 +99,7 @@ function Nav() {
   const menuItems = [
     { id: 1, text: 'Home', href: '#' },
     { id: 2, text: 'About', href: '#about' },
-    { id: 3, text: 'Contacts', href: '#contacts' },
+    { id: 3, text: 'Contact', href: '#contacts' },
     { id: 4, text: 'Features', href: '#features' },
   ];
 

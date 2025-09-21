@@ -138,7 +138,7 @@ const Testi = () => {
   };
 
   return (
-    <section id="contacts" className="py-6 sm:py-8 md:py-12 px-4 sm:px-6 md:px-8">
+    <section id="contact" className="py-6 sm:py-8 md:py-12 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-[90%] sm:max-w-4xl mx-auto">
         <h2
           className="capitalize text-[1.5rem] xs:text-[2rem] sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgb(182,135,86)] via-[rgb(238,190,138)] to-[rgb(182,135,86)] text-center mb-6 sm:mb-8 md:mb-12"
