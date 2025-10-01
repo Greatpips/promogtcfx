@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import backGroundImg from './img/background-img.png';
+import DesktopImg from './img/background-img.png'; // Replace with actual desktop image path
+import MobileImg from './img/mobile-img.png'; // Replace with actual mobile image path
 import FadeIn from './FadeIn';
 
 function Hero() {
@@ -15,7 +16,8 @@ function Hero() {
     Whatsapp: '',
   });
 
-  const scriptUrl = 'https://script.google.com/macros/s/AKfycbxo_SvuggiuzOcUumNKXKzmz8rrvE3Zp-8Y_xGYLGsLE3NnsSxvvpzfOkkN6NS6sakZRw/exec';
+  const scriptUrl =
+    'https://script.google.com/macros/s/AKfycbxo_SvuggiuzOcUumNKXKzmz8rrvE3Zp-8Y_xGYLGsLE3NnsSxvvpzfOkkN6NS6sakZRw/exec';
 
   const handleSignUpClick = () => {
     setShowForm(true);
@@ -34,7 +36,7 @@ function Hero() {
   };
 
   const handleWhatsAppRedirect = () => {
-    const whatsappLink = "https://wa.me/2347076560970";
+    const whatsappLink = 'https://wa.me/2347076560970';
     window.location.href = whatsappLink;
     setShowSuccessModal(false);
   };
@@ -77,7 +79,6 @@ function Hero() {
     }
   };
 
-  // New useEffect hook to handle form success and trigger the Facebook Pixel event
   useEffect(() => {
     if (status === 'succeeded') {
       if (typeof fbq !== 'undefined') {
@@ -89,31 +90,69 @@ function Hero() {
   }, [status]);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
-      <div
-        className="absolute inset-0 bg-contain bg-repeat md:bg-no-repeat md:bg-cover"
-        style={{ backgroundImage: `url(${backGroundImg})` }}
-      ></div>
-
-      <div className="absolute inset-0 flex flex-col items-center justify-center md:items-start md:justify-start px-4 sm:px-6">
-        <div className="flex flex-col gap-4 mt-[clamp(25rem,55vh,20rem)] md:ml-[8rem]">
-          <FadeIn>
-            <button
-              onClick={handleSignUpClick}
-              className="bg-[rgb(182,135,86)] text-[0.9rem] xs:text-[1rem] sm:text-[1.1rem] md:text-[1.2rem] text-white px-4 xs:px-6 sm:px-8 md:px-10 py-2 sm:py-4 rounded-2xl hover:bg-[rgb(2,0,47)] focus:ring-2 focus:ring-[rgb(182,135,86)] focus:outline-none active:bg-[rgb(2,0,47)] transition duration-300"
-              aria-label="Reserve your seat now"
-            >
-              Reserve Your Seat Now
-            </button>
-          </FadeIn>
-
-          <FadeIn>
-            <button className="bg-[rgb(182,135,86)] text-[0.9rem] xs:text-[1rem] sm:text-[1.1rem] md:text-[1.2rem] text-white px-4 xs:px-6 sm:px-8 md:px-10 py-2 sm:py-4 rounded-2xl hover:bg-[rgb(2,0,47)] focus:ring-2 focus:ring-[rgb(182,135,86)] focus:outline-none active:bg-[rgb(2,0,47)] transition duration-300">
-              Venue: 25 Citc House, Wemco Road, Ikeja, Lagos
-            </button>
-          </FadeIn>
+    <section className="relative w-full h-fit overflow-hidden">
+      {/* Background images */}
+      <div>
+        <div className="hidden sm:block h-full">
+          <img
+            src={DesktopImg}
+            alt="Desktop Hero Background"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="sm:hidden h-full">
+          <img
+            src={MobileImg}
+            alt="Mobile Hero Background"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
+
+      {/* Buttons Overlay */}
+      <div className="absolute inset-0">
+  <div className="absolute left-[5%] sm:left-[8%] bottom-[40%] sm:bottom-[29%] flex flex-col gap-4">
+    <FadeIn>
+      {/* ✅ Visible on all sizes */}
+      <button
+        onClick={handleSignUpClick}
+        className="block bg-[rgb(182,135,86)] 
+                   text-[clamp(0.8rem,1.5vw,1.2rem)] 
+                   text-white 
+                   px-[clamp(0.8rem,2vw,2.5rem)] 
+                   py-[clamp(0.5rem,1.2vw,1rem)] 
+                   rounded-2xl 
+                   hover:bg-[rgb(2,0,47)] 
+                   focus:ring-2 focus:ring-[rgb(182,135,86)] 
+                   focus:outline-none 
+                   active:bg-[rgb(2,0,47)] 
+                   transition duration-300 max-w-fit"
+      >
+        Reserve Your Seat Now
+      </button>
+    </FadeIn>
+
+    <FadeIn>
+      {/* ❌ Hidden on mobile, visible on sm+ */}
+      <button
+        className="hidden sm:block bg-[rgb(182,135,86)] 
+                   text-[clamp(0.8rem,1.5vw,1.2rem)] 
+                   text-white 
+                   px-[clamp(0.8rem,2vw,2.5rem)] 
+                   py-[clamp(0.5rem,1.2vw,1rem)] 
+                   rounded-2xl 
+                   hover:bg-[rgb(2,0,47)] 
+                   focus:ring-2 focus:ring-[rgb(182,135,86)] 
+                   focus:outline-none 
+                   active:bg-[rgb(2,0,47)] 
+                   transition duration-300 max-w-fit"
+      >
+        Venue: 25 Citc House, Wemco Road, Ikeja, Lagos
+      </button>
+    </FadeIn>
+  </div>
+</div>
+
 
       {/* Pop-up Sign-up Form */}
       {showForm && (
@@ -127,7 +166,9 @@ function Hero() {
               isTransitioning ? 'scale-100' : 'scale-95'
             }`}
           >
-            <h2 className="text-lg xs:text-xl sm:text-2xl font-bold mb-4 text-gray-800">Sign Up</h2>
+            <h2 className="text-lg xs:text-xl sm:text-2xl font-bold mb-4 text-gray-800">
+              Sign Up
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -137,7 +178,6 @@ function Hero() {
                 value={formData.Name}
                 onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="name-error"
               />
               <input
                 type="email"
@@ -147,7 +187,6 @@ function Hero() {
                 value={formData.Email}
                 onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="email-error"
               />
               <input
                 type="tel"
@@ -157,7 +196,6 @@ function Hero() {
                 value={formData.Phone}
                 onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
-                aria-describedby="phone-error"
               />
               <input
                 type="tel"
@@ -167,13 +205,12 @@ function Hero() {
                 onChange={handleChange}
                 className="w-full p-2 xs:p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm xs:text-base"
               />
-             
+
               <div className="flex justify-end space-x-2 xs:space-x-3 sm:space-x-4">
                 <button
                   type="button"
                   onClick={closeForm}
                   className="px-3 xs:px-4 sm:px-6 py-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 focus:ring-2 focus:ring-gray-400 focus:outline-none text-sm xs:text-base transition duration-300"
-                  aria-label="Cancel form"
                 >
                   Cancel
                 </button>
@@ -181,7 +218,6 @@ function Hero() {
                   type="submit"
                   disabled={status === 'submitting'}
                   className="px-3 xs:px-4 sm:px-6 py-2 bg-blue-900 text-white rounded-full hover:bg-blue-800 focus:ring-2 focus:ring-blue-900 focus:outline-none text-sm xs:text-base transition duration-300"
-                  aria-label={status === 'submitting' ? 'Submitting form' : 'Submit form'}
                 >
                   {status === 'submitting' ? 'Submitting...' : 'Submit'}
                 </button>
@@ -191,7 +227,7 @@ function Hero() {
         </div>
       )}
 
-      {/* Custom Success Modal */}
+      {/* Success Modal */}
       {showSuccessModal && (
         <div
           className={`fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out ${
@@ -199,10 +235,12 @@ function Hero() {
           }`}
         >
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm mx-4 text-center transform transition-all duration-300 ease-in-out scale-100">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Registration Complete!</h3>
+            <h3 className="text-xl font-bold mb-4 text-gray-800">
+              Registration Complete!
+            </h3>
             <p className="text-gray-600 mb-6">
-              Congratulations! Your registration is successfully completed.
-              Do you well to chat with us via WhatsApp, Thank you
+              Congratulations! Your registration is successfully completed. Do
+              you well to chat with us via WhatsApp, Thank you
             </p>
             <div className="flex justify-center space-x-4">
               <button
