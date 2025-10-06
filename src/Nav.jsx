@@ -41,7 +41,7 @@ function Nav() {
   };
 
   const handleWhatsAppRedirect = () => {
-    const whatsappLink = "https://wa.me/2347076560970";
+    const whatsappLink = "https://whatsapp.com/channel/0029VaMaJlk5Ejy4Xz3zdz0U";
     window.location.href = whatsappLink;
     setShowSuccessModal(false);
   };
