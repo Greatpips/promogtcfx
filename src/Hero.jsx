@@ -111,7 +111,7 @@ function Hero() {
 
       {/* Buttons Overlay */}
       <div className="absolute inset-0">
-  <div className="absolute left-[5%] sm:left-[8%] bottom-[40%] sm:bottom-[29%] flex flex-col gap-4">
+  <div className="absolute left-[35%] sm:left-[40%] bottom-[5%] sm:bottom-[20%] flex flex-col gap-4">
     <FadeIn>
       {/* ✅ Visible on all sizes */}
       <button
@@ -135,7 +135,7 @@ function Hero() {
     <FadeIn>
       {/* ❌ Hidden on mobile, visible on sm+ */}
       <button
-        className="hidden sm:block bg-[rgb(182,135,86)] 
+        className="hidden bg-[rgb(182,135,86)] 
                    text-[clamp(0.8rem,1.5vw,1.2rem)] 
                    text-white 
                    px-[clamp(0.8rem,2vw,2.5rem)] 
