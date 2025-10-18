@@ -111,7 +111,7 @@ function Hero() {
 
       {/* Buttons Overlay */}
       <div className="absolute inset-0">
-  <div className="absolute left-[35%] sm:left-[40%] bottom-[5%] sm:bottom-[20%] flex flex-col gap-4">
+  <div className="absolute left-[35%] sm:left-[33%] bottom-[10%] sm:bottom-[30%] flex flex-col gap-4">
     <FadeIn>
       {/* ✅ Visible on all sizes */}
       <button
