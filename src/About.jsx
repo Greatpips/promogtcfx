@@ -52,7 +52,7 @@ function About() {
   }, [status]);
 
   const handleWhatsAppRedirect = () => {
-    const whatsappLink = "https://whatsapp.com/channel/0029VaMaJlk5Ejy4Xz3zdz0U";
+    const whatsappLink = "https://wa.me/message/3G2UIJH6XRPVI1";
     window.location.href = whatsappLink;
     setShowSuccessModal(false);
   };
