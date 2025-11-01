@@ -1549,10 +1549,22 @@ natural-compare@^1.4.0:
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+node-bin-setup@^1.0.0:
+  version "1.1.4"
+  resolved "https://registry.npmjs.org/node-bin-setup/-/node-bin-setup-1.1.4.tgz"
+  integrity sha512-vWNHOne0ZUavArqPP5LJta50+S8R261Fr5SvGul37HbEDcowvLjwdvd0ZeSr0r2lTSrPxl6okq9QUw8BFGiAxA==
+
 node-releases@^2.0.21:
   version "2.0.21"
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.21.tgz"
   integrity sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==
+
+node@^25.1.0:
+  version "25.1.0"
+  resolved "https://registry.npmjs.org/node/-/node-25.1.0.tgz"
+  integrity sha512-nYC3Zsz3ZQHGbBQrU8OAf63Qwhgptf352vQLGXVES2dL22QRrwjGzkuGS+C4FJ1b0awisMEe2tuPU87MDwj61A==
+  dependencies:
+    node-bin-setup "^1.0.0"
 
 object-assign@^4.1.1:
   version "4.1.1"
@@ -1883,9 +1895,9 @@ uri-js@^4.2.2:
     punycode "^2.1.0"
 
 "vite@^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0", "vite@^5.2.0 || ^6 || ^7", vite@^7.1.2:
-  version "7.1.5"
-  resolved "https://registry.npmjs.org/vite/-/vite-7.1.5.tgz"
-  integrity sha512-4cKBO9wR75r0BeIWWWId9XK9Lj6La5X846Zw9dFfzMRw38IlTk2iCcUt6hsyiDRcPidc55ZParFYDXi0nXOeLQ==
+  version "7.1.12"
+  resolved "https://registry.npmjs.org/vite/-/vite-7.1.12.tgz"
+  integrity sha512-ZWyE8YXEXqJrrSLvYgrRP7p62OziLW7xI5HYGWFzOvupfAlrLvURSzv/FyGyy0eidogEM3ujU+kUG1zuHgb6Ug==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.5.0"
